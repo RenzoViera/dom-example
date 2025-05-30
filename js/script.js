@@ -2,11 +2,13 @@
 const personas = [
   {
     nombre: "Juan Perez",
-    edad: 18,
+    edad: 16  ,
+    email: "email",
   },
   {
     nombre: "Maria Loza",
     edad: 21,
+    email: "email",
   },
 ];
 
@@ -21,11 +23,17 @@ function agregarPersona() {
   //borramos el contenido del elemento
   msgErrorEdad.innerHTML = "";
 
+  const msgErrorEmail = document.querySelector("#msg-error-email");
+  //borramos el contenido del elemento
+  msgErrorEmail.innerHTML = "";
+
   //Obtenemos el input donde se ingresa el nombre
   const inputNombre = document.querySelector("#input-nombre");
 
   //Obtenemos el input donde se ingresa la edad
   const inputEdad = document.querySelector("#input-edad");
+
+  const inputEmail = document.querySelector("#input-email");
 
   //Creamos una variable que indica si el formulario tiene error
   //Inicialmente suponemos que el fomulario NO tiene error
@@ -37,6 +45,13 @@ function agregarPersona() {
   if (nombre === "") {
     //De ser asi, colocamos el mensaje de error al contenido del elemento para mostrar el error
     msgErrorNombre.innerHTML = "Debe ingresar un nombre";
+    //Le asigamos el valor true indicando que el formulario tiene error
+    hayError = true;
+  }
+  const Email = inputEmail.value.trim();
+  if (Email === "") {
+    //De ser asi, colocamos el mensaje de error al contenido del elemento para mostrar el error
+    msgErrorEmail.innerHTML = "Debe ingresar un email";
     //Le asigamos el valor true indicando que el formulario tiene error
     hayError = true;
   }
@@ -57,7 +72,20 @@ function agregarPersona() {
     hayError = true;
   }
 
-  //Si el formulario tiene algun error (valores invalidos)
+let email = inputEmail.value.trim();
+
+function esEmailValido(email) {
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return regex.test(email);
+}
+
+if (email === "") {
+  msgErrorEmail.innerHTML = "Debe ingresar un email";
+  hayError = true;
+} else if (!esEmailValido(email)) {
+  msgErrorEmail.innerHTML = "Debe ingresar un correo válido";
+  hayError = true;
+}
   if (hayError) {
     //Es lo mismo que escribir hayError === true
     //Salimos del método por que no hay nada mas que hacer
@@ -70,6 +98,7 @@ function agregarPersona() {
   const nuevaPersona = {
     nombre: nombre,
     edad: edad,
+    email: email
   };
 
   //Ingresamos el nuevo objeto persona dentro del arreglo
@@ -77,6 +106,7 @@ function agregarPersona() {
   //Limpiamos los inputs
   inputNombre.value = "";
   inputEdad.value = "";
+  inputEmail.value = "";
 
   //Actualizamos la tabla de personas para reflejar los cambios en el arreglo
   actualizarLista();
@@ -129,12 +159,14 @@ function actualizarLista() {
     //La segunda celda contiene el nombre de la persona que actualmente se esta iterando
     //La tercer celda contiene la edad de la persona que actualmente se esta iterando
     html +=
-      `<tr><td><input class="btn-delete" type="button" onclick="eliminar(${i})" value="Eliminar"></td>` +
-      "<td>" +
-      persona.nombre +
-      "</td><td>" +
-      persona.edad +
-      "</td></tr>";
+  `<tr><td><input class="btn-delete" type="button" onclick="eliminar(${i})" value="Eliminar"></td>` +
+  "<td>" +
+  persona.nombre +
+  "</td><td>" +
+  persona.edad +
+  "</td><td>" +
+  persona.email +
+  "</td></tr>";
   }
 
   //Al final se colocará el html que se generó dentro del contenido del <tbody>
